@@ -1,6 +1,4 @@
-This is a code for Tableau extension that automatically updates all data sources used in a workbook when a user clicks a button.
-
-I followed these step-by-step instructions from Tableau's GitHub page.
+This is a code for embedding a dashboard from Tableau Online to a webpage. When a user clicks on a mark or marks in the dashboard, the information about these marks is sisplayed under the viz. 
 
 Created as a part of the [Tableau #DataDev Mini-Challenges](https://www.tableau.com/developer/mini-challenges).
 
