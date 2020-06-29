@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>See data for selected marks</title>
+
+    <script
+      type="text/javascript"
+      src="https://online.tableau.com/javascripts/api/tableau-2.4.0.min.js"
+    ></script>
+
+    <script type="text/javascript">
+      let viz;
+
+      function initViz() {
+        let containerDiv = document.getElementById("vizContainer"),
+          url =
+            "https://10ax.online.tableau.com/t/anyaprosvetovadev642402/views/Salesbystate/Salesbystate",
+          options = {
+            height: 827,
+            width: 1000,
+            onFirstVizSizeKnown: function () {
+                console.log("This dashboard has a size.");
+            },      
+            State: "",
+            hideTabs: true,
+            onFirstInteractive: function () {
+                console.log("The viz has finished loading.");  
+              listenToMarksSelection();
+            },
+          };
+
+        viz = new tableau.Viz(containerDiv, url, options);
+      }
+
+      function listenToMarksSelection() {
+        viz.addEventListener(
+          tableau.TableauEventName.MARKS_SELECTION,
+          onMarksSelection
+        );
+      }
+
+      function onMarksSelection(marksEvent) {
+        return marksEvent.getMarksAsync().then(showSelectedMarks);
+      }
+
+      function showSelectedMarks(marks) {
+        let html = "";
+
+        for (let markIndex = 0; markIndex < marks.length; markIndex++) {
+          let pairs = marks[markIndex].getPairs();
+          html += "<b>Mark " + markIndex + ":</b><ul>";
+
+          for (let pairIndex = 0; pairIndex < pairs.length; pairIndex++) {
+            let pair = pairs[pairIndex];
+            html += "<li><b>Field Name:</b> " + pair.fieldName;
+            html += "<br/><b>Value:</b> " + pair.formattedValue + "</li>";
+          }
+
+          html += "</ul>";
+        }
+
+        let infoDiv = document.getElementById("markDetails");
+        infoDiv.innerHTML = html;
+      }
+    </script>
+  </head>
+
+  <body onload="initViz();">
+    <div id="vizContainer" style="width: 1000px; height: 827px;"></div>
+    <br>
+    <div id="titleDetails">
+        Information about the selected state is displayed below.
+    </div>
+    </br>
+    <div id="markDetails"></div>
+  </body>
+</html>
